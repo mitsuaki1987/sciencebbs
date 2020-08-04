@@ -1,7 +1,25 @@
 <?php
   $fp = fopen('data.csv', 'a+b');
+  $submittime = date("c");
+  $uploadfile = date("U") . "_" . $_FILES['filename']['name'];
+    
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    fputcsv($fp, [$_POST['name'], $_POST['comment'], $_POST['submittype']]);
+    if ($_POST['submittype'] === 'text') {
+      fputcsv($fp, [$_POST['name'], $_POST['comment'], $_POST['submittype'], $submittime]);
+    }
+    elseif ($_POST['submittype'] === 'latex') {
+      fputcsv($fp, [$_POST['name'], $_POST['comment'], $_POST['submittype'], $submittime]);
+    }
+    elseif ($_POST['submittype'] === 'image') {
+      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $_FILES['filename']['tmp_name'], $uploadfile]);
+      move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile);
+      chmod($uploadfile, 0777);
+    }
+    elseif ($_POST['submittype'] === 'file') {
+      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $_FILES['filename']['tmp_name'], $uploadfile]);
+      move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile);
+      chmod($uploadfile, 0777);
+    }
     rewind($fp);
   }
   while ($row = fgetcsv($fp)) {
@@ -32,9 +50,15 @@
       <ul>
         <?php foreach ($rows as $row): ?>
           <?php if ($row[2] == 'text'): ?>
-            <li><?=$row[1]?> (<?=$row[2]?>) (by <?=$row[0]?>)</li>
+            <li><?=$row[1]?> (<?=$row[2]?>) (by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php elseif ($row[2] == 'latex'): ?>
-            <li>\[ <?=$row[1]?> \] (<?=$row[2]?>) (by2  <?=$row[0]?>)</li>
+            <li>\[ <?=$row[1]?> \] (<?=$row[2]?>) (by2  <?=$row[0]?> at <?=$row[3]?>)</li>
+          <?php elseif ($row[2] == 'freehand'): ?>
+            <li><img src="<?=$row[1]?>"> (<?=$row[2]?>) (by <?=$row[0]?> at <?=$row[3]?>)</li>
+          <?php elseif ($row[2] == 'image'): ?>
+            <li><img src="<?=$row[1]?>"> (<?=$row[2]?>) (by <?=$row[0]?> at <?=$row[3]?>)</li>
+          <?php elseif ($row[2] == 'file'): ?>
+            <li><a href="<?=$row[1]?>"><?=$row[1]?></a> (<?=$row[2]?>) (by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php endif; ?>
         <?php endforeach; ?>
       </ul>
@@ -44,7 +68,7 @@
 
     <h2>Submit</h2>
     
-    <form action="" method="post">
+    <form enctype="multipart/form-data" action="" method="post">
       Name: <input type="text" name="name" value="">
       </br>
       Comment:
@@ -58,7 +82,6 @@
       </br>
       <canvas id="canvas" width="600" height="600" style="border:solid black 1px;"></canvas>
       <script src="./draw.js"></script>
-      <button onclick="startup()">Initialize</button>
       <br>
       <input type="radio" name="submittype" value="text" checked="checked">Text
       <input type="radio" name="submittype" value="latex">Latex
