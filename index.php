@@ -81,31 +81,27 @@
     <h2>Submit</h2>
     
     <form enctype="multipart/form-data" action="" method="post">
-      Name: <input type="text" name="name" value="">
+      Name: <input type="text" name="name" id="submitname" value="">
       </br>
       Comment:
       </br>
-      <textarea name="comment" cols="30" rows="3" maxlength="80" wrap="hard" placeholder="Within 80 latters">
-      </textarea>
+      <textarea name="comment" cols="40" rows="5" maxlength="200" wrap="hard"></textarea>
       </br>
       File: <input type="file" name="filename">
       <br>
       <input type="radio" name="submittype" value="text" checked="checked">Text
       <input type="radio" name="submittype" value="latex">Latex
-      <input type="radio" name="submittype" value="freehand">FreeHand
       <input type="radio" name="submittype" value="image">Image
       <input type="radio" name="submittype" value="file">File
       <input type="submit" value="Submit">
     </form>
     <hr>
     Free hand:
+    <input type="button" value="Clear" onclick="clearCanvas();">
+    <input type="button" value="Submit Freehand, then push F5" id="canvassubmit">
     <br>
     <canvas id="canvas" width="600" height="600" style="border:solid black 1px;"></canvas>
-    <br>
-    Name: <input type="text" name="namefreehand" id="freehandname" value="">
-    <input type="button" value="Clear" onclick="clearCanvas();">
-    <input type="button" value="Submit Freehand" id="canvassubmit">
-    Log: <pre id="log" style="border: 1px solid #ccc;"></pre>
+    <!-- Log: <pre id="log" style="border: 1px solid #ccc;"></pre> --->
     <script src="./draw.js"></script>
   </body>
 </html>

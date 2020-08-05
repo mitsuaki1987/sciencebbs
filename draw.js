@@ -49,7 +49,7 @@ function handleEnd(evt) {
     var ctx = el.getContext("2d");
     var touches = evt.changedTouches;
 
-    log("touchend");
+    //log("touchend");
     for (var i = 0; i < touches.length; i++) {
         var idx = ongoingTouchIndexById(touches[i].identifier);
 
@@ -102,19 +102,15 @@ window.onload = function() {
 
 function post() {
     var fd = new FormData();
-    log("posted2x");
-    var name = document.getElementById('freehandname').value;
+    var name = document.getElementById('submitname').value;
     img_url = canvas.toDataURL("image/png").replace(new RegExp("data:image/png;base64,"),"");
-    log("posted2a");
     fd.append('submittype','freehand');
     fd.append('name',name);
-    log("posted2d");
     fd.append('comment',img_url);
     var xhr = new XMLHttpRequest();
-    log("posted2b");
     
     xhr.open('POST', './index.php', true);
     xhr.send(fd);
-    log("posted2c");
+
     window.location.reload();
-}
+ }
