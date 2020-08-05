@@ -17,7 +17,6 @@ function handleStart(evt) {
     
     for (var i = 0; i < touches.length; i++) {
         ongoingTouches.push(copyTouch(touches[i]));
-        var color = colorForTouch(touches[i]);
     }
 }
 
@@ -29,7 +28,6 @@ function handleMove(evt) {
     var touches = evt.changedTouches;
 
     for (var i = 0; i < touches.length; i++) {
-        var color = colorForTouch(touches[i]);
         var idx = ongoingTouchIndexById(touches[i].identifier);
 
         if (idx == 0) {
@@ -37,7 +35,7 @@ function handleMove(evt) {
             ctx.moveTo(ongoingTouches[idx].clientX -  rect.left, ongoingTouches[idx].clientY - rect.top);
             ctx.lineTo(touches[i].clientX - rect.left, touches[i].clientY - rect.top);
             ctx.lineWidth = 4;
-            ctx.strokeStyle = color;
+            ctx.strokeStyle = "#000000";
             ctx.stroke();
 
             ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
@@ -51,8 +49,8 @@ function handleEnd(evt) {
     var ctx = el.getContext("2d");
     var touches = evt.changedTouches;
 
+    log("touchend");
     for (var i = 0; i < touches.length; i++) {
-        var color = colorForTouch(touches[i]);
         var idx = ongoingTouchIndexById(touches[i].identifier);
 
         if (idx >= 0) {
@@ -70,16 +68,6 @@ function handleCancel(evt) {
         ongoingTouches.splice(idx, 1);  // remove it; we're done
     }
 }
-function colorForTouch(touch) {
-    var r = touch.identifier % 16;
-    var g = Math.floor(touch.identifier / 3) % 16;
-    var b = Math.floor(touch.identifier / 7) % 16;
-    r = r.toString(16); // make it a hex digit
-    g = g.toString(16); // make it a hex digit
-    b = b.toString(16); // make it a hex digit
-    var color = "#" + r + g + b;
-    return color;
-}
 function copyTouch({ identifier, clientX, clientY }) {
     return { identifier, clientX, clientY };
 }
@@ -93,4 +81,40 @@ function ongoingTouchIndexById(idToFind) {
         }
     }
     return -1;    // not found
+}
+function clearCanvas() {
+    var el = document.getElementById("canvas");
+    var ctx = el.getContext("2d");
+
+    ctx.clearRect(0, 0, el.width, el.height);
+}
+function log(msg) {
+  var p = document.getElementById('log');
+  p.innerHTML = msg + "\n" + p.innerHTML;
+}
+
+window.onload = function() {
+  document.getElementById('canvassubmit').onclick = function() {
+    post();
+  };
+
+};
+
+function post() {
+    var fd = new FormData();
+    log("posted2x");
+    var name = document.getElementById('freehandname').value;
+    img_url = canvas.toDataURL("image/png").replace(new RegExp("data:image/png;base64,"),"");
+    log("posted2a");
+    fd.append('submittype','freehand');
+    fd.append('name',name);
+    log("posted2d");
+    fd.append('comment',img_url);
+    var xhr = new XMLHttpRequest();
+    log("posted2b");
+    
+    xhr.open('POST', './index.php', true);
+    xhr.send(fd);
+    log("posted2c");
+    window.location.reload();
 }
