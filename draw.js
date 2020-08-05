@@ -26,7 +26,10 @@ function handleMove(evt) {
     var ctx = el.getContext("2d");
     var rect = el.getBoundingClientRect()
     var touches = evt.changedTouches;
-
+    var elcolor = document.getElementById('linecolor');
+    var radioNodeList = elcolor.color;
+    var linecolor = radioNodeList.value;
+    
     for (var i = 0; i < touches.length; i++) {
         var idx = ongoingTouchIndexById(touches[i].identifier);
 
@@ -35,7 +38,7 @@ function handleMove(evt) {
             ctx.moveTo(ongoingTouches[idx].clientX -  rect.left, ongoingTouches[idx].clientY - rect.top);
             ctx.lineTo(touches[i].clientX - rect.left, touches[i].clientY - rect.top);
             ctx.lineWidth = 4;
-            ctx.strokeStyle = "#000000";
+            ctx.strokeStyle = linecolor;
             ctx.stroke();
 
             ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
@@ -88,6 +91,14 @@ function clearCanvas() {
 
     ctx.clearRect(0, 0, el.width, el.height);
 }
+function resizeCanvas() {
+    var el = document.getElementById("canvas");
+    var width = document.getElementById('width').value;
+    var height = document.getElementById('height').value;
+
+    el.setAttribute("width", width);
+    el.setAttribute("height", height);
+}
 function log(msg) {
   var p = document.getElementById('log');
   p.innerHTML = msg + "\n" + p.innerHTML;
@@ -113,4 +124,4 @@ function post() {
     xhr.send(fd);
 
     window.location.reload();
- }
+}
