@@ -9,12 +9,12 @@
       fputcsv($fp, [$_POST['name'], $_POST['comment'], $_POST['submittype'], $submittime, $submitid]);
     }
     elseif ($_POST['submittype'] === 'image') {
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid]);
+      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid, $_FILES['avatar']['tmp_name']]);
       move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadfile);
       chmod($uploadfile, 0777);
     }
     elseif ($_POST['submittype'] === 'file') {
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid]);
+      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid, $_FILES['avatar']['tmp_name']]);
       move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadfile);
       chmod($uploadfile, 0777);
     }
@@ -82,6 +82,7 @@
     <h2>Submit</h2>
 
 
+    <input type="button" value="Submit" id="canvassubmit">
     <form id="submittype">
       <input type="radio" name="subtype" value="text" checked="checked">Text
       <input type="radio" name="subtype" value="image">Image
@@ -98,10 +99,8 @@
       File: <input type="file" id="file" name="filename">
       <br>
     </form>
-    <hr>
     Free hand:
     <input type="button" value="Clear" onclick="clearCanvas();">
-    <input type="button" value="Submit" id="canvassubmit">
     <br>
     Width: <input type="text" id="width" value="600">
     Height: <input type="text" id="height" value="600">
