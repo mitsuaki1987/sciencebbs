@@ -1,20 +1,21 @@
 <?php
   $fp = fopen('data.csv', 'a+b');
   $submittime = date("c");
-  $uploadfile = date("U") . "_" . $_FILES['filename']['name'];
+  $submitid = date("U");
+  $uploadfile = $submitid . "_" . $_FILES['avatar']['name'];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST['submittype'] === 'text') {
-      fputcsv($fp, [$_POST['name'], $_POST['comment'], $_POST['submittype'], $submittime]);
+      fputcsv($fp, [$_POST['name'], $_POST['comment'], $_POST['submittype'], $submittime, $submitid]);
     }
     elseif ($_POST['submittype'] === 'image') {
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $_FILES['filename']['tmp_name'], $uploadfile]);
-      move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile);
+      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid]);
+      move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadfile);
       chmod($uploadfile, 0777);
     }
     elseif ($_POST['submittype'] === 'file') {
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $_FILES['filename']['tmp_name'], $uploadfile]);
-      move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile);
+      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid]);
+      move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadfile);
       chmod($uploadfile, 0777);
     }
     elseif ($_POST['submittype'] === 'freehand') {
@@ -25,8 +26,7 @@
       imagesavealpha($image, TRUE);
       imagepng($image , $uploadfile);
   
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $_FILES['filename']['tmp_name'], $uploadfile]);
-      move_uploaded_file($_FILES['filename']['tmp_name'], $uploadfile);
+      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid]);
       chmod($uploadfile, 0777);
     }
     rewind($fp);
@@ -63,13 +63,13 @@
       <ul>
         <?php foreach ($rows as $row): ?>
           <?php if ($row[2] == 'text'): ?>
-            <li><?=$row[1]?> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
+            <li><?=$row[1]?> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
           <?php elseif ($row[2] == 'freehand'): ?>
-            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
+            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
           <?php elseif ($row[2] == 'image'): ?>
-            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
+            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
           <?php elseif ($row[2] == 'file'): ?>
-            <li><a href="<?=$row[1]?>"><?=$row[1]?></a> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
+            <li><a href="<?=$row[1]?>"><?=$row[1]?></a> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
           <?php endif; ?>
         <?php endforeach; ?>
       </ul>
@@ -78,25 +78,28 @@
     <?php endif; ?>
 
     <h2>Submit</h2>
-    
-    <form enctype="multipart/form-data" action="" method="post">
+
+
+    <form id="submittype">
+      <input type="radio" name="subtype" value="text" checked="checked">Text
+      <input type="radio" name="subtype" value="image">Image
+      <input type="radio" name="subtype" value="file">File
+      <input type="radio" name="subtype" value="freehand">Freehand
+    </form>
+    <form enctype="multipart/form-data" id="submitting" action="" method="post">
       Name: <input type="text" name="name" id="submitname" value="">
       </br>
       Comment:
       </br>
-      <textarea name="comment" cols="40" rows="5" maxlength="1000" wrap="hard"></textarea>
+      <textarea name="comment" id="comment" cols="40" rows="5" maxlength="1000" wrap="hard"></textarea>
       </br>
-      File: <input type="file" name="filename">
+      File: <input type="file" id="file" name="filename">
       <br>
-      <input type="radio" name="submittype" value="text" checked="checked">Text
-      <input type="radio" name="submittype" value="image">Image
-      <input type="radio" name="submittype" value="file">File
-      <input type="submit" value="Submit">
     </form>
     <hr>
     Free hand:
     <input type="button" value="Clear" onclick="clearCanvas();">
-    <input type="button" value="Submit Freehand, then push F5" id="canvassubmit">
+    <input type="button" value="Submit" id="canvassubmit">
     <br>
     Width: <input type="text" id="width" value="600">
     Height: <input type="text" id="height" value="600">

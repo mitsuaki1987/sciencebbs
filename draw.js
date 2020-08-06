@@ -26,9 +26,7 @@ function handleMove(evt) {
     var ctx = el.getContext("2d");
     var rect = el.getBoundingClientRect()
     var touches = evt.changedTouches;
-    var elcolor = document.getElementById('linecolor');
-    var radioNodeList = elcolor.color;
-    var linecolor = radioNodeList.value;
+    var linecolor = document.getElementById('linecolor').color.value;
     
     for (var i = 0; i < touches.length; i++) {
         var idx = ongoingTouchIndexById(touches[i].identifier);
@@ -113,15 +111,34 @@ window.onload = function() {
 
 function post() {
     var fd = new FormData();
-    var name = document.getElementById('submitname').value;
-    img_url = canvas.toDataURL("image/png").replace(new RegExp("data:image/png;base64,"),"");
-    fd.append('submittype','freehand');
-    fd.append('name',name);
-    fd.append('comment',img_url);
-    var xhr = new XMLHttpRequest();
     
-    xhr.open('POST', './index.php', true);
-    xhr.send(fd);
+    var submittype = document.getElementById('submittype').subtype.value;
+    fd.append('submittype',submittype);
 
+    var name = document.getElementById('submitname').value;
+    fd.append('name',name);
+
+    if(submittype == "text"){
+        var comment = document.getElementById('comment').value;
+        fd.append('comment', comment);
+    }
+    else if(submittype == "image"){
+        const file = document.getElementById("file").files[0];
+        fd.append('avatar', file);
+    }
+    else if(submittype == "file"){
+        const file = document.getElementById("file").files[0];
+        fd.append('avatar', file);
+    }
+    else if(submittype == "freehand"){
+        img_url = canvas.toDataURL("image/png").replace(new RegExp("data:image/png;base64,"),"");
+        fd.append('comment',img_url);
+    }
+    
+    const param = {
+        method: "POST",
+        body: fd
+    }
+    fetch("./index.php", param);
     window.location.reload();
 }
