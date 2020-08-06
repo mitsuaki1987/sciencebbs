@@ -31,9 +31,11 @@
     }
     rewind($fp);
   }
+  
   while ($row = fgetcsv($fp)) {
     $rows[] = $row;
   }
+  
   fclose($fp);
 ?>
 <!DOCTYPE html>
@@ -63,13 +65,13 @@
       <ul>
         <?php foreach ($rows as $row): ?>
           <?php if ($row[2] == 'text'): ?>
-            <li><?=$row[1]?> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
+            <li><?=$row[1]?> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php elseif ($row[2] == 'freehand'): ?>
-            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
+            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php elseif ($row[2] == 'image'): ?>
-            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
+            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php elseif ($row[2] == 'file'): ?>
-            <li><a href="<?=$row[1]?>"><?=$row[1]?></a> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>, <?=$row[4]?>)</li>
+            <li><a href="<?=$row[1]?>"><?=$row[1]?></a> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php endif; ?>
         <?php endforeach; ?>
       </ul>
