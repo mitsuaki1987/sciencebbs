@@ -254,8 +254,11 @@ function post() {
         method: "POST",
         body: fd
     }
-    fetch("./index.php", param);
-    window.location.reload();
+    fetch("./index.php", param).then((res) => {
+        if (res.ok) {
+            window.location.reload();
+        }
+    });
 }
     </script>
   </body>
