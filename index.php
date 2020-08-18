@@ -56,8 +56,12 @@
   <body>
     <h1>BBS</h1>
 
-    <p>&bsol; &lbrack; &bsol;&rbrack; : Independent LaTex formula</p>
-    <p>$\$\$$ : Inline LaTex formula</p>
+    <ul>
+      <li><code>\[ \]</code> : Independent LaTex formula</li>
+      <li><code>$ $</code> : Inline LaTex formula</li>
+      <li><code>&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;</code> : Itemization</li>
+      <li><code>&lt;br&gt;</code> : New line</li>
+    </ul>
     
     <h2>Comments</h2>
 
@@ -115,8 +119,8 @@
     </form>
     <canvas id="canvas" width="600" height="600" style="border:solid black 1px;"></canvas>
     <pre id="log" style="border: 1px solid #ccc;"></pre>
-    <script type="text/javascript">
-    function startup() {
+<script type="text/javascript">
+function startup() {
     var el = document.getElementById("canvas");
     el.addEventListener("touchstart", handleStart, false);
     el.addEventListener("touchend", handleEnd, false);
@@ -261,5 +265,7 @@ function post() {
     });
 }
     </script>
+    </hr>
+    This BBS operates with <a href="https://ja.osdn.net/projects/sciencebbs/">ScienceBBS</a>.
   </body>
 </html>
