@@ -51,6 +51,19 @@
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
     </script>
     <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+  function makePreview() {
+    input = $('#comment').val();
+    $('#preview').html(input);
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"preview"]);
+  }
+  $('body').keyup(function(){makePreview()});
+  $('body').bind('updated',function(){makePreview()});
+  makePreview();
+});
+</script>
     <title>BBS</title>
   </head>
   <body>
@@ -99,6 +112,10 @@
       Comment:
       </br>
       <textarea name="comment" id="comment" cols="40" rows="5" maxlength="1000" wrap="hard"></textarea>
+      </br>
+      Preview:
+      </br>
+      <div id="preview"></div>
       </br>
       File: <input type="file" id="file" name="filename">
       <br>
@@ -264,7 +281,7 @@ function post() {
         }
     });
 }
-    </script>
+</script>
     </hr>
     This BBS operates with <a href="https://ja.osdn.net/projects/sciencebbs/">ScienceBBS</a>.
   </body>
