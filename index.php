@@ -94,6 +94,7 @@ $(function() {
       <li><code>$ $</code> : Inline LaTex formula</li>
       <li><code>&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;</code> : Itemization</li>
       <li><code>&lt;br&gt;</code> : New line</li>
+      <li><a href="./rss.xml">RSS</a></li>
     </ul>
     
     <h2>Comments</h2>
