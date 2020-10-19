@@ -1,11 +1,15 @@
 <?php
   $fp = fopen('data.csv', 'a+b');
-  $submittime = date("c");
-  $submitid = date("U");
-  $uploadfile = $submitid . "_" . $_FILES['avatar']['name'];
-  $thisurl = (empty($_SERVER["HTTPS"]) ? "http://" : "https://") . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $submittime = date("c");
+    $submitid = date("U");
+
+    $submittype = $_POST['submittype'];
+    $name = $_POST['name'];
+
+    $thisurl = (empty($_SERVER["HTTPS"]) ? "http://" : "https://") . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 
     $rssxml = fopen('rss.xml', 'w');
     fwrite($rssxml, "<?xml version='1.0' encoding='UTF-8'?>\n");
@@ -15,7 +19,7 @@
     fwrite($rssxml, "    <link>" . $thisurl . "</link>\n");
     fwrite($rssxml, "    <description></description>\n");
     fwrite($rssxml, "    <item>\n");
-    fwrite($rssxml, "      <title>" . $_POST['name'] . " wrote a comment</title>\n");
+    fwrite($rssxml, "      <title>" . $name . " wrote a comment</title>\n");
     fwrite($rssxml, "      <link>" . $thisurl . "</link>\n");
     fwrite($rssxml, "      <guid>" . $thisurl . "#". $submitid . "</guid>\n");
     fwrite($rssxml, "      <description></description>\n");
@@ -25,20 +29,18 @@
     fwrite($rssxml, "</rss>\n");
     fclose($rssxml);
 
-    if ($_POST['submittype'] === 'text') {
-      fputcsv($fp, [$_POST['name'], $_POST['comment'], $_POST['submittype'], $submittime, $submitid]);
+    if ($submittype === 'text') {
+      $comment = $_POST['comment'];
+      fputcsv($fp, [$name, $comment, $submittype, $submittime, $submitid]);
     }
-    elseif ($_POST['submittype'] === 'image') {
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid, $_FILES['avatar']['tmp_name']]);
-      move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadfile);
+    elseif ($submittype === 'file' or $submittype === 'image') {
+      $uploadfile = $submitid . "_" . $_FILES['avatar']['name'];
+      $tmp_name = $_FILES['avatar']['tmp_name'];
+      fputcsv($fp, [$name, $uploadfile, $submittype, $submittime, $submitid, $tmp_name]);
+      move_uploaded_file($tmp_name, $uploadfile);
       chmod($uploadfile, 0777);
     }
-    elseif ($_POST['submittype'] === 'file') {
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid, $_FILES['avatar']['tmp_name']]);
-      move_uploaded_file($_FILES['avatar']['tmp_name'], $uploadfile);
-      chmod($uploadfile, 0777);
-    }
-    elseif ($_POST['submittype'] === 'freehand') {
+    elseif ($submittype === 'freehand') {
       $canvas = $_POST['comment'];
       $canvas = base64_decode($canvas);
       $image = imagecreatefromstring($canvas);
@@ -46,7 +48,7 @@
       imagesavealpha($image, TRUE);
       imagepng($image , $uploadfile);
   
-      fputcsv($fp, [$_POST['name'], $uploadfile, $_POST['submittype'], $submittime, $submitid]);
+      fputcsv($fp, [$name, $uploadfile, $submittype, $submittime, $submitid]);
       chmod($uploadfile, 0777);
     }
     rewind($fp);
@@ -104,9 +106,7 @@ $(function() {
         <?php foreach ($rows as $row): ?>
           <?php if ($row[2] == 'text'): ?>
             <li><?=$row[1]?> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
-          <?php elseif ($row[2] == 'freehand'): ?>
-            <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
-          <?php elseif ($row[2] == 'image'): ?>
+          <?php elseif ($row[2] == 'freehand' or $row[2] == 'image'): ?>
             <li><img src="<?=$row[1]?>" height="400" align="middle"> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php elseif ($row[2] == 'file'): ?>
             <li><a href="<?=$row[1]?>"><?=$row[1]?></a> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
@@ -119,8 +119,7 @@ $(function() {
 
     <h2>Submit</h2>
 
-
-    <input type="button" value="Submit" id="canvassubmit">
+    <input type="button" value="Submit" onclick="post()">
     <form id="submittype">
       <input type="radio" name="subtype" value="text" checked="checked">Text
       <input type="radio" name="subtype" value="image">Image
@@ -260,12 +259,6 @@ function log(msg) {
   p.innerHTML = msg + "\n" + p.innerHTML;
 }
 
-window.onload = function() {
-  document.getElementById('canvassubmit').onclick = function() {
-    post();
-  };
-};
-
 function post() {
     var fd = new FormData();
     
@@ -279,11 +272,7 @@ function post() {
         var comment = document.getElementById('comment').value;
         fd.append('comment', comment);
     }
-    else if(submittype == "image"){
-        const file = document.getElementById("file").files[0];
-        fd.append('avatar', file);
-    }
-    else if(submittype == "file"){
+    else if(submittype == "image" || submittype == "file"){
         const file = document.getElementById("file").files[0];
         fd.append('avatar', file);
     }
