@@ -1,4 +1,4 @@
-<?php
+﻿<?php
   $fp = fopen('data.csv', 'a+b');
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -11,23 +11,25 @@
 
     $thisurl = (empty($_SERVER["HTTPS"]) ? "http://" : "https://") . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
 
-    $rssxml = fopen('rss.xml', 'w');
-    fwrite($rssxml, "<?xml version='1.0' encoding='UTF-8'?>\n");
-    fwrite($rssxml, "<rss version='2.0'>\n");
-    fwrite($rssxml, "  <channel>\n");
-    fwrite($rssxml, "    <title>BBS</title>\n");
-    fwrite($rssxml, "    <link>" . $thisurl . "</link>\n");
-    fwrite($rssxml, "    <description></description>\n");
-    fwrite($rssxml, "    <item>\n");
-    fwrite($rssxml, "      <title>" . $name . " wrote a comment</title>\n");
-    fwrite($rssxml, "      <link>" . $thisurl . "</link>\n");
-    fwrite($rssxml, "      <guid>" . $thisurl . "#". $submitid . "</guid>\n");
-    fwrite($rssxml, "      <description></description>\n");
-    fwrite($rssxml, "      <pubDate>" . $submittime . "</pubDate>\n");
-    fwrite($rssxml, "    </item>\n");
-    fwrite($rssxml, "  </channel>\n");
-    fwrite($rssxml, "</rss>\n");
-    fclose($rssxml);
+    if ($submittype === 'text' or $submittype === 'file' or $submittype === 'image' or $submittype === 'freehand'){
+      $rssxml = fopen('rss.xml', 'w');
+      fwrite($rssxml, "<?xml version='1.0' encoding='UTF-8'?>\n");
+      fwrite($rssxml, "<rss version='2.0'>\n");
+      fwrite($rssxml, "  <channel>\n");
+      fwrite($rssxml, "    <title>BBS</title>\n");
+      fwrite($rssxml, "    <link>" . $thisurl . "</link>\n");
+      fwrite($rssxml, "    <description></description>\n");
+      fwrite($rssxml, "    <item>\n");
+      fwrite($rssxml, "      <title>" . $name . " wrote a comment</title>\n");
+      fwrite($rssxml, "      <link>" . $thisurl . "</link>\n");
+      fwrite($rssxml, "      <guid>" . $thisurl . "#". $submitid . "</guid>\n");
+      fwrite($rssxml, "      <description></description>\n");
+      fwrite($rssxml, "      <pubDate>" . $submittime . "</pubDate>\n");
+      fwrite($rssxml, "    </item>\n");
+      fwrite($rssxml, "  </channel>\n");
+      fwrite($rssxml, "</rss>\n");
+      fclose($rssxml);
+    }
 
     if ($submittype === 'text') {
       $comment = $_POST['comment'];
@@ -70,7 +72,7 @@
       MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] }, displayAlign: "left" });
     </script>
     <script type="text/javascript"
-            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML">
     </script>
     <meta http-equiv="X-UA-Compatible" CONTENT="IE=EmulateIE7" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -158,101 +160,106 @@ $(function() {
     <pre id="log" style="border: 1px solid #ccc;"></pre>
 <script type="text/javascript">
 function startup() {
-    var el = document.getElementById("canvas");
-    el.addEventListener("touchstart", handleStart, false);
-    el.addEventListener("touchend", handleEnd, false);
-    el.addEventListener("touchcancel", handleCancel, false);
-    el.addEventListener("touchmove", handleMove, false);
+  var el = document.getElementById("canvas");
+  el.addEventListener("touchstart", touch_start, false);
+  el.addEventListener("touchmove", touch_move, false);
+  el.addEventListener("mousedown", mouse_down, false);
+  el.addEventListener("mousemove", mouse_move, false);
+  el.addEventListener("mouseup", mouse_up, false);
 }
 
 document.addEventListener("DOMContentLoaded", startup);
-var ongoingTouches = [];
 
-function handleStart(evt) {
-    evt.preventDefault();
-    var el = document.getElementById("canvas");
-    var ctx = el.getContext("2d");
-    var touches = evt.changedTouches;
-    
-    for (var i = 0; i < touches.length; i++) {
-        ongoingTouches.push(copyTouch(touches[i]));
+let touch0x = 0.0;
+let touch0y = 0.0;
+
+function touch_start(evt) {
+  evt.preventDefault();
+  var touches = evt.changedTouches;
+  for (i = 0; i < touches.length; i++) {
+    if (touches[i].identifier == 0) {
+      touch0x = touches[i].clientX;
+      touch0y = touches[i].clientY;
     }
+  }
 }
 
-function handleMove(evt) {
-    evt.preventDefault();
+function touch_move(evt) {
+  evt.preventDefault();
+  var touches = evt.changedTouches;
+  var el = document.getElementById("canvas");
+  var ctx = el.getContext("2d");
+  var rect = el.getBoundingClientRect()
+  var linecolor = document.getElementById('linecolor').color.value;
+
+  for (i = 0; i < touches.length; i++) {
+    if (touches[i].identifier == 0) {
+      ctx.beginPath();
+      ctx.moveTo(touch0x            - rect.left, touch0y            - rect.top);
+      ctx.lineTo(touches[i].clientX - rect.left, touches[i].clientY - rect.top);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = linecolor;
+      ctx.stroke();
+      touch0x = touches[i].clientX;
+      touch0y = touches[i].clientY;
+    }
+  }
+}
+let isDrawing = false;
+
+function mouse_down(evt){
+  touch0x = evt.offsetX;
+  touch0y = evt.offsetY;
+  isDrawing = true;
+};
+
+function mouse_move(evt) {
+  var el = document.getElementById("canvas");
+  var ctx = el.getContext("2d");
+  var linecolor = document.getElementById('linecolor').color.value;
+
+  if (isDrawing === true) {
+    ctx.beginPath();
+    ctx.moveTo(touch0x, touch0y);
+    ctx.lineTo(evt.offsetX, evt.offsetY);
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = linecolor;
+    ctx.stroke();
+    touch0x = evt.offsetX;
+    touch0y = evt.offsetY;
+  }
+};
+
+function mouse_up(evt) {
     var el = document.getElementById("canvas");
     var ctx = el.getContext("2d");
-    var rect = el.getBoundingClientRect()
-    var touches = evt.changedTouches;
     var linecolor = document.getElementById('linecolor').color.value;
-    
-    for (var i = 0; i < touches.length; i++) {
-        var idx = ongoingTouchIndexById(touches[i].identifier);
 
-        if (idx == 0) {
-            ctx.beginPath();
-            ctx.moveTo(ongoingTouches[idx].clientX -  rect.left, ongoingTouches[idx].clientY - rect.top);
-            ctx.lineTo(touches[i].clientX - rect.left, touches[i].clientY - rect.top);
-            ctx.lineWidth = 4;
-            ctx.strokeStyle = linecolor;
-            ctx.stroke();
-
-            ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
-        }
-    }
-}
-function handleEnd(evt) {
-    evt.preventDefault();
-    var el = document.getElementById("canvas");
-    var ctx = el.getContext("2d");
-    var touches = evt.changedTouches;
-
-    //log("touchend");
-    for (var i = 0; i < touches.length; i++) {
-        var idx = ongoingTouchIndexById(touches[i].identifier);
-
-        if (idx >= 0) {
-            ongoingTouches.splice(idx, 1);  // remove it; we're done
-        }
-    }
-}
-function handleCancel(evt) {
-    evt.preventDefault();
-    var touches = evt.changedTouches;
-    
-    for (var i = 0; i < touches.length; i++) {
-        var idx = ongoingTouchIndexById(touches[i].identifier);
-        ongoingTouches.splice(idx, 1);  // remove it; we're done
-    }
-}
-function copyTouch({ identifier, clientX, clientY }) {
-    return { identifier, clientX, clientY };
-}
-
-function ongoingTouchIndexById(idToFind) {
-    for (var i = 0; i < ongoingTouches.length; i++) {
-        var id = ongoingTouches[i].identifier;
-        
-        if (id == idToFind) {
-            return i;
-        }
-    }
-    return -1;    // not found
-}
+    if (isDrawing === true) {
+      ctx.beginPath();
+      ctx.moveTo(touch0x, touch0y);
+      ctx.lineTo(evt.offsetX, evt.offsetY);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = linecolor;
+      ctx.stroke();
+      touch0x = 0;
+      touch0y = 0;
+    isDrawing = false;
+  }
+};
 function clearCanvas() {
-    var el = document.getElementById("canvas");
-    var ctx = el.getContext("2d");
+  var el = document.getElementById("canvas");
+  var ctx = el.getContext("2d");
 
-    ctx.clearRect(0, 0, el.width, el.height);
+  ctx.clearRect(0, 0, el.width, el.height);
 }
 function resizeCanvas() {
-    var el = document.getElementById("canvas");
-    var width = document.getElementById('width').value;
-    var height = document.getElementById('height').value;
+  var el = document.getElementById("canvas");
+  var width = document.getElementById('width').value;
+  var height = document.getElementById('height').value;
 
-    el.setAttribute("width", width);
-    el.setAttribute("height", height);
+  el.setAttribute("width", width);
+  el.setAttribute("height", height);
 }
 function log(msg) {
   var p = document.getElementById('log');
@@ -260,36 +267,36 @@ function log(msg) {
 }
 
 function post() {
-    var fd = new FormData();
+  var fd = new FormData();
     
-    var submittype = document.getElementById('submittype').subtype.value;
-    fd.append('submittype',submittype);
+  var submittype = document.getElementById('submittype').subtype.value;
+  fd.append('submittype',submittype);
 
-    var name = document.getElementById('submitname').value;
-    fd.append('name',name);
+  var name = document.getElementById('submitname').value;
+  fd.append('name',name);
 
-    if(submittype == "text"){
-        var comment = document.getElementById('comment').value;
-        fd.append('comment', comment);
-    }
-    else if(submittype == "image" || submittype == "file"){
-        const file = document.getElementById("file").files[0];
-        fd.append('avatar', file);
-    }
-    else if(submittype == "freehand"){
-        img_url = canvas.toDataURL("image/png").replace(new RegExp("data:image/png;base64,"),"");
-        fd.append('comment',img_url);
-    }
+  if(submittype == "text"){
+    var comment = document.getElementById('comment').value;
+    fd.append('comment', comment);
+  }
+  else if(submittype == "image" || submittype == "file"){
+    const file = document.getElementById("file").files[0];
+    fd.append('avatar', file);
+  }
+  else if(submittype == "freehand"){
+    img_url = canvas.toDataURL("image/png").replace(new RegExp("data:image/png;base64,"),"");
+    fd.append('comment',img_url);
+  }
     
-    const param = {
-        method: "POST",
-        body: fd
+  const param = {
+    method: "POST",
+    body: fd
+  }
+  fetch("./index.php", param).then((res) => {
+    if (res.ok) {
+      window.location.reload();
     }
-    fetch("./index.php", param).then((res) => {
-        if (res.ok) {
-            window.location.reload();
-        }
-    });
+  });
 }
 </script>
     </hr>
