@@ -1,4 +1,4 @@
-﻿<?php
+<?php
   $fp = fopen('data.csv', 'a+b');
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -104,7 +104,7 @@ $(function() {
     <h2>Comments</h2>
 
     <?php if (!empty($rows)): ?>
-      <ul>
+      <ol>
         <?php foreach ($rows as $row): ?>
           <?php if ($row[2] == 'text'): ?>
             <li><?=$row[1]?> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
@@ -114,7 +114,7 @@ $(function() {
             <li><a href="<?=$row[1]?>"><?=$row[1]?></a> (<?=$row[2]?> by <?=$row[0]?> at <?=$row[3]?>)</li>
           <?php endif; ?>
         <?php endforeach; ?>
-      </ul>
+      </ol>
     <?php else: ?>
       <p>No comments</p>
     <?php endif; ?>
