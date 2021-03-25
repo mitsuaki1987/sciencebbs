@@ -11,20 +11,20 @@ BBS for scientific discussion. It has the following features:
 
 There are following two type of BBS
 
-* `noauth/` : Without authentification.
-* `auth/` : With Basic authentification
+* Without authentification.
+* With Basic authentification
 
-`noauth` : without authentification
------------------------------------
+Without authentification
+------------------------
 
-The usage is just to copy `noauth/index.php` into any HTTP/HTTPS server.
+The usage is just to copy `src/noauth/index.php` into any HTTP/HTTPS server.
 
-`auth` : with Basic authentification
-------------------------------------
+With Basic authentification
+---------------------------
 
 The usage is as follows:
 
-1. copy `auth/index.php` into any HTTP/HTTPS server.
+1. copy `src/auth/index.php` into any HTTP/HTTPS server.
 2. Create `.htaccess` in the same directory. Its contents is as follows
    ```
    AuthUserFile DIRECTORY_NAME/.htpasswd

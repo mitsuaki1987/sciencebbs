@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="43mm"
+   height="32mm"
+   viewBox="0 0 43 32"
+   version="1.1"
+   id="svg8"
+   inkscape:export-filename="/home/kawamura/download/kimetsu.png"
+   inkscape:export-xdpi="400"
+   inkscape:export-ydpi="400"
+   inkscape:version="1.0.2 (1.0.2+r75+1)"
+   sodipodi:docname="sciencebbs.svg">
+  <defs
+     id="defs2">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath987">
+      <rect
+         y="176.58559"
+         x="12.448179"
+         height="25.174732"
+         width="32.472095"
+         id="rect989"
+         style="fill:none;fill-opacity:1;stroke:#ffff00;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath991">
+      <rect
+         y="149.00267"
+         x="54.823475"
+         height="25.174736"
+         width="32.472095"
+         id="rect993"
+         style="fill:none;fill-opacity:1;stroke:#ffff00;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.58615"
+     inkscape:cx="108.29121"
+     inkscape:cy="79.732401"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="false"
+     inkscape:pagecheckerboard="false"
+     scale-x="0.5"
+     inkscape:window-width="1920"
+     inkscape:window-height="1137"
+     inkscape:window-x="1920"
+     inkscape:window-y="65"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:snap-global="false" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="レイヤー 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-197)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:12.7px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="1.3163335"
+       y="207.03397"
+       id="text840"><tspan
+         sodipodi:role="line"
+         x="1.3163335"
+         y="207.03397"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.7px;font-family:cmr10;-inkscape-font-specification:cmr10;stroke-width:0.264583"
+         id="tspan842">Science</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:11.2034px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.280084"
+       x="1.2143021"
+       y="227.31569"
+       id="text840-3"><tspan
+         sodipodi:role="line"
+         x="1.2143021"
+         y="227.31569"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.9131px;font-family:cmr10;-inkscape-font-specification:cmr10;stroke-width:0.280084"
+         id="tspan842-7">BBS</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 2.0823456,209.33384 H 40.742653"
+       id="path876"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 2.0823455,211.39967 H 40.742653"
+       id="path876-5"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>
