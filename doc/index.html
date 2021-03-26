@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja">
+  <head>
+    <meta name="Content-Language" content="ja">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+
+    <title>ScienceBBS Web page</title>
+  </head>
+
+  <body bgcolor="CCFFCC">
+    <hr>
+    
+    <h1>
+      <img src="fig/sciencebbs.png" height="50" style="vertical-align: -moz-middle-with-baseline; ">
+      <a href="https://osdn.net/projects/sciencebbs/">ScienceBBS</a></h1>
+    <hr>
+	<h4>
+    BBS for scientific discussion. It has the following features:
+
+    <ul>
+      <li>TeX formula</li>
+      <li>Free-hand schematic illustration</li>
+      <li>Display JPEG, PNG, GIF, MPEG, etc.</li>
+      <li>Attach files such as PDF.  </li>
+    </ul>
+     </h4>
+    <hr>
+	<h3><a href="https://osdn.net/projects/sciencebbs/scm/git/sciencebbs/">Git repository</a></h3>
+	
+    <hr>
+    <h2>Demo page</h2>
+    There are two kind of BBS.
+
+    <h3><a href="noauth/index.php">Without auhentification</a></h3>
+    We can comment freely as arbitrary handle-name.
+
+    <h3><a href="auth/index.php">With Basic auhentification</a></h3>
+    We can login as the following two accounts:
+    <ul>
+      <li>Account : <code>user1</code>, Password : <code>pass1</code></li>
+      <li>Account : <code>user2</code>, Password : <code>pass2</code></li>
+    </ul> 
+    <hr>
+    <h2>How to create your own ScienceBBS</h2>
+
+    <h3>Without authentification</h3>
+     
+    The usage is just to copy
+    <a href="https://osdn.net/projects/sciencebbs/scm/git/sciencebbs/blobs/master/src/noauth/index.php?export=raw">src/noauth/index.php</a>
+    into any HTTP/HTTPS server.
+     
+    <h3>With Basic authentification</h3>
+     
+    The usage is as follows:
+    <ol>
+      <li>
+        copy
+        <a href="https://osdn.net/projects/sciencebbs/scm/git/sciencebbs/blobs/master/src/auth/index.php?export=raw">src/auth/index.php</a>
+        into any HTTP/HTTPS server.
+      </li>
+      <li>
+        Create <code>.htaccess</code> in the same directory. Its contents is as follows
+        <pre style="border: 1px solid #000000;background-color: #ffffff;padding-left: 10px;"><code>
+AuthUserFile DIRECTORY_NAME/.htpasswd
+AuthName GROUP-NAME
+AuthType Basic
+&lt;Limit GET&gt;
+require valid-user
+&lt;/Limit&gt;
+        </code></pre>
+        where <it>DIRECTORY_NAME</it> is the full-path to the directory where <code>index.php</code> locates,
+        <it>GROUP-NAME</it> is the appropriate owner group in that server.
+      </li>
+      <li>
+        Create password file and add first user with the following command:
+        <pre style="border: 1px solid #000000;background-color: #ffffff;padding-left: 10px;"><code>
+htpasswd -cm DIRECTORY_NAME/.htpasswd USER_NAME1
+chgrp GROUP-NAME DIRECTORY_NAME/.htpasswd
+chmod o-w DIRECTORY_NAME/.htpasswd
+        </code></pre>
+        whrere <it>USER_NAME1</it> is the name of the first user.
+      </li>
+      <li>
+        Add other users (<it>USER_NAME2</it>) as follws:
+        <pre style="border: 1px solid #000000;background-color: #ffffff;padding-left: 10px;"><code>
+htpasswd -m DIRECTORY_NAME/.htpasswd USER_NAME2
+        </code></pre>
+      </li>
+      <li>
+        The previous command is also used to change the password for any user (<it>USER_NAME</it>).
+        <pre style="border: 1px solid #000000;background-color: #ffffff;padding-left: 10px;"><code>
+htpasswd -m DIRECTORY_NAME/.htpasswd USER_NAME
+        </code></pre>
+      </li>
+      <li>
+        To remove authentification for any user (<it>USER_NAME</it>), please type
+        <pre style="border: 1px solid #000000;background-color: #ffffff;padding-left: 10px;"><code>
+htpasswd -D DIRECTORY_NAME/.htpasswd USER_NAME
+        </code></pre>
+      </li>
+    </ol>
+  </body>
+</html>

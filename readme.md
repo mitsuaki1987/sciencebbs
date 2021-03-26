@@ -28,20 +28,20 @@ The usage is as follows:
 2. Create `.htaccess` in the same directory. Its contents is as follows
    ```
    AuthUserFile DIRECTORY_NAME/.htpasswd
-   AuthName projectname
+   AuthName GROUP-NAME
    AuthType Basic
    <Limit GET>
    require valid-user
    </Limit>
    ```
-   where *DIRECTORY_NAME* is the full-path to the directory where `index.php` locates.
+   where *DIRECTORY_NAME* is the full-path to the directory where `index.php` locates, *GROUP-NAME* is the appropriate owner group in that server.
 3. Create password file and add first user with the following command:
    ``` bash
    htpasswd -cm DIRECTORY_NAME/.htpasswd USER_NAME1
    chgrp GROUP-NAME DIRECTORY_NAME/.htpasswd
    chmod o-w DIRECTORY_NAME/.htpasswd
    ```
-   whrere *USER_NAME1* is the name of the first user, *GROUP-NAME* is the appropriate owner group in that server.
+   whrere *USER_NAME1* is the name of the first user.
 4. Add other users (*USER_NAME2*) as follws:
    ``` bash
    htpasswd -m DIRECTORY_NAME/.htpasswd USER_NAME2
