@@ -99,6 +99,7 @@ $(function() {
       <li><code>&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;</code> : Itemization</li>
       <li><code>&lt;br&gt;</code> : New line</li>
       <li><a href="./rss.xml">RSS</a></li>
+      <li><a href="#submit">Go to bottom to submit a comment</a></li>
     </ul>
     
     <h2>Comments</h2>
@@ -119,7 +120,7 @@ $(function() {
       <p>No comments</p>
     <?php endif; ?>
 
-    <h2>Submit</h2>
+    <h2 id="submit">Submit</h2>
 
     <input type="button" value="Submit" onclick="post()">
     <form id="submittype">

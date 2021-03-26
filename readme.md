@@ -1,7 +1,7 @@
 ScienceBBS
 ==========
 
-BBS for scientific discussion. It has the following features:
+BBS engine for scientific discussion. It has the following features:
 
 * Tex formula
 * Free-hand schematic illustration

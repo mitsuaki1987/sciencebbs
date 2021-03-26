@@ -99,7 +99,8 @@ $(function() {
       <li><code>&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;</code> : Itemization</li>
       <li><code>&lt;br&gt;</code> : New line</li>
       <li><a href="./rss.xml">RSS</a></li>
-    </ul>
+      <li><a href="#submit">Go to bottom to submit a comment</a></li>
+  </ul>
     
     <h2>Comments</h2>
 
@@ -119,7 +120,7 @@ $(function() {
       <p>No comments</p>
     <?php endif; ?>
 
-    <h2>Submit</h2>
+    <h2 id="submit">Submit</h2>
 
     <input type="button" value="Submit" onclick="post()">
     <form id="submittype">
@@ -129,6 +130,8 @@ $(function() {
       <input type="radio" name="subtype" value="freehand">Freehand
     </form>
     <form enctype="multipart/form-data" id="submitting" action="" method="post">
+      Name: <?=$_SERVER['PHP_AUTH_USER']?>
+      </br>
       Comment:
       </br>
       <textarea name="comment" id="comment" cols="40" rows="5" maxlength="1000" wrap="hard"></textarea>
