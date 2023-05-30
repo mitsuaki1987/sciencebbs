@@ -301,6 +301,6 @@ function post() {
 }
 </script>
     </hr>
-    This BBS operates with <a href="https://ja.osdn.net/projects/sciencebbs/">ScienceBBS</a>.
+    This BBS operates with <a href="https://github.com/mitsuaki1987/sciencebbs">ScienceBBS</a>.
   </body>
 </html>
